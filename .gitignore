@@ -11,6 +11,8 @@
 # production
 /build
 /dist
+/data
+/node_modules
 
 # misc
 .DS_Store

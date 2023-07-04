@@ -6,19 +6,19 @@ scalar DateTime
     nome: String
     documento: String
     tipoContribuinte: String
-    inscricaoEstadual: String
     razaoSocial: String
     cep: String
     endereco: String
     numero: String
     complemento: String
     bairro: String
-    cidade: String
+    municipio: String
     uf: String
     telefone: String
     email: String
-    ativo: Boolean
+    dataInicio: DateTime
     observacao: String
+    ativo: Boolean
     jwt: String
     senha: String
     permicao: String
@@ -30,19 +30,19 @@ scalar DateTime
     nome: String!
     documento: String!
     tipoContribuinte: String!
-    inscricaoEstadual: String
     razaoSocial: String!
     cep: String
     endereco: String
     numero: String
     complemento: String
     bairro: String
-    cidade: String
+    municipio: String
     uf: String
     telefone: String
     email: String!
-    ativo: Boolean
+    dataInicio: DateTime
     observacao: String
+    ativo: Boolean
     jwt: String
     senha: String!
     permicao: String!

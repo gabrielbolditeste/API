@@ -9,19 +9,19 @@ interface IUsuario {
   nome: string;
   documento: string;
   tipoContribuinte: string;
-  inscricaoEstadual: string;
   razaoSocial: string;
   cep: string;
   endereco: string;
   numero: string;
   complemento: string;
   bairro: string;
-  cidade: string;
+  municipio: string;
   uf: string;
   telefone: string;
   email: string;
-  ativo: boolean;
+  dataInicio: Date;
   observacao: string;
+  ativo: boolean;
   jwt: string;
   senha: string;
   permicao: string;
@@ -60,10 +60,6 @@ const UsuarioModel = new Schema<IUsuario>(
         message: "O Tipo de contribuinte {VALUE} não é valido"
       }
     },
-    inscricaoEstadual: {
-      type: String,
-      default: ""
-    },
     razaoSocial: {
       type: String,
       required: [true, "A Razão Social é obrigatório"],
@@ -90,7 +86,7 @@ const UsuarioModel = new Schema<IUsuario>(
       type: String,
       default: ""
     },
-    cidade: {
+    municipio: {
       type: String,
       default: ""
     },
@@ -107,9 +103,9 @@ const UsuarioModel = new Schema<IUsuario>(
       required: [true, "O Email é obrigatório"],
       validate: [isEmail, "{VALUE} não é um Email valido"]
     },
-    ativo: {
-      type: Boolean,
-      default: true,
+    dataInicio: {
+      type: Date,
+      default: Date.now
     },
     observacao: {
       type: String,
@@ -122,6 +118,10 @@ const UsuarioModel = new Schema<IUsuario>(
     senha: {
       type: String,
       required: [true, "A Senha é obrigatória"],
+    },
+    ativo: {
+      type: Boolean,
+      default: true,
     },
     permicao: {
       type: String,
