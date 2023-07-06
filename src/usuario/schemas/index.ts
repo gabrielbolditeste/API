@@ -2,10 +2,8 @@ export const usuarioTypeDefs = `#graphql
 scalar DateTime
   type Usuario {
     _id: String
-    categoria: String
     nome: String
     documento: String
-    tipoContribuinte: String
     razaoSocial: String
     cep: String
     endereco: String
@@ -16,8 +14,7 @@ scalar DateTime
     uf: String
     telefone: String
     email: String
-    dataInicio: DateTime
-    observacao: String
+    observacoes: String
     ativo: Boolean
     jwt: String
     senha: String
@@ -26,10 +23,8 @@ scalar DateTime
   }
 
   input UsuarioInput {
-    categoria: String!
     nome: String!
     documento: String!
-    tipoContribuinte: String!
     razaoSocial: String!
     cep: String
     endereco: String
@@ -40,8 +35,7 @@ scalar DateTime
     uf: String
     telefone: String
     email: String!
-    dataInicio: DateTime
-    observacao: String
+    observacoes: String
     ativo: Boolean
     jwt: String
     senha: String!

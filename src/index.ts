@@ -1,8 +1,11 @@
 import { produtoTypeDefs } from "./produto/schemas/index.js";
 import { usuarioTypeDefs } from "./usuario/schemas/index.js";
+import { clienteTypeDefs } from "./cliente/schemas/index.js";
 
 import { produtoResolvers } from "./produto/resolvers/index.js";
 import { usuarioResolvers } from "./usuario/resolvers/index.js";
+import { clienteResolvers } from "./cliente/resolvers/index.js";
+
 
 import { mergeTypeDefs } from "@graphql-tools/merge";
 import { mergeResolvers } from "@graphql-tools/merge";
@@ -10,8 +13,8 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { connect } from "mongoose";
 
-const typeDefs = mergeTypeDefs([produtoTypeDefs, usuarioTypeDefs]);
-const resolvers = mergeResolvers([produtoResolvers, usuarioResolvers]);
+const typeDefs = mergeTypeDefs([produtoTypeDefs, usuarioTypeDefs, clienteTypeDefs]);
+const resolvers = mergeResolvers([produtoResolvers, usuarioResolvers, clienteResolvers]);
 
 const MONGODB = "mongodb+srv://root:root@cluster0.kh8rbcy.mongodb.net/KMBv2?retryWrites=true&w=majority";
 

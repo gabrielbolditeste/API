@@ -5,10 +5,9 @@ import { Schema, model } from "mongoose";
 
 interface IUsuario {
   id: string;
-  categoria: string;
+  senha: string;
   nome: string;
   documento: string;
-  tipoContribuinte: string;
   razaoSocial: string;
   cep: string;
   endereco: string;
@@ -19,11 +18,9 @@ interface IUsuario {
   uf: string;
   telefone: string;
   email: string;
-  dataInicio: Date;
-  observacao: string;
+  observacoes: string;
   ativo: boolean;
   jwt: string;
-  senha: string;
   permicao: string;
   dataCadastro: Date;
 }
@@ -33,14 +30,6 @@ const UsuarioModel = new Schema<IUsuario>(
     id: {
       type: String
     },
-    categoria: {
-      type: String,
-      required: [true, "A Categoria é obrigatório"],
-      enum: {
-        values: ["Representante", "Vendedor"],
-        message: "A Categoria {VALUE} não é valida"
-      }
-    },
     nome: {
       type: String,
       required: [true, "O Nome é obrigatório"],
@@ -48,17 +37,9 @@ const UsuarioModel = new Schema<IUsuario>(
     },
     documento: {
       type: String,
-      required: [true, "O Documento é obrigatório"],
-      min: [11, "Mínimo de 11 caracteres"],
-      max: [14, "Máximo de 14 caracteres"]
-    },
-    tipoContribuinte: {
-      type: String,
-      required: [true, "O Tipo de contribuinte é obrigatório"],
-      enum: {
-        values: ["Contribuinte", "Avaliar", "Não Contribuinte"],
-        message: "O Tipo de contribuinte {VALUE} não é valido"
-      }
+      // required: [true, "O Documento é obrigatório"],
+      // min: [11, "Mínimo de 11 caracteres"],
+      // max: [14, "Máximo de 14 caracteres"]
     },
     razaoSocial: {
       type: String,
@@ -103,11 +84,7 @@ const UsuarioModel = new Schema<IUsuario>(
       required: [true, "O Email é obrigatório"],
       validate: [isEmail, "{VALUE} não é um Email valido"]
     },
-    dataInicio: {
-      type: Date,
-      default: Date.now
-    },
-    observacao: {
+    observacoes: {
       type: String,
       default: ""
     },

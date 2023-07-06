@@ -11,7 +11,7 @@ export const usuarioResolvers = {
     },
 
     async usuario(_, { id }) {
-      console.log("[Usuario ID] - ", id);
+      // console.log("[Usuario ID] - ", id);
 
       const usuario = await Usuario.findById(id);
 
