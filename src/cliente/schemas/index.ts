@@ -42,6 +42,7 @@ scalar DateTime
   type Query {
     clientes(page: Int, limit: Int): [Cliente]
     cliente(id: ID!): Cliente!
+    clientesPorUsuario(id: ID!, page: Int, limit: Int): [Cliente]
   }
 
   type Mutation {
