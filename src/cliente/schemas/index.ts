@@ -2,25 +2,6 @@
 export const clienteTypeDefs = `#graphql
 scalar DateTime
 
-  type Usuario {
-    _id: String
-    nome: String
-    documento: String
-    razaoSocial: String
-    cep: String
-    endereco: String
-    numero: String
-    complemento: String
-    bairro: String
-    municipio: String
-    uf: String
-    telefone: String
-    email: String
-    observacoes: String
-    ativo: Boolean
-    dataCadastro: DateTime
-  }
-
   type Cliente {
     _id: String
     nome: String
