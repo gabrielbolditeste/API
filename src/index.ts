@@ -24,7 +24,7 @@ await connect(MONGODB);
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers
 });
 
 const port = Number.parseInt(process.env.PORT) || 4000;

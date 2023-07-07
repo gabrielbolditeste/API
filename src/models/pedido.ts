@@ -1,21 +1,41 @@
 import mongoose, { Schema, Types, model } from "mongoose";
 
+// interface IPedido {
+//   id: string;
+//   produtos: [
+//     {
+//       codigo: string,
+//       descricao: string,
+//       preco: number,
+//       produto: Types.ObjectId
+//     }
+//   ];
+//   descontos: Array<number>;
+//   total: number;
+//   data: Date;
+//   cliente: Types.ObjectId;
+//   usuario: Types.ObjectId;
+// }
 interface IPedido {
   id: string;
-  produtos: [
-    {
-      codigo: string,
-      descricao: string,
-      preco: number,
-      produto: Types.ObjectId
-    }
-  ];
+  produtos: Array<IProduto>;
   descontos: Array<number>;
   total: number;
   data: Date;
   cliente: Types.ObjectId;
   usuario: Types.ObjectId;
 }
+
+interface IProduto {
+  codigo: string,
+  descricao: string,
+  preco: number,
+  quantidade: number,
+  produto: Types.ObjectId
+}
+
+// const childSchema: Schema = new Schema({ name: String });
+// const ChildModel = model<Child>('Child', childSchema);
 
 const PedidoModel = new Schema<IPedido>({
   id: {
@@ -34,6 +54,12 @@ const PedidoModel = new Schema<IPedido>({
       type: Number,
       required: [true, "Preço é obrigatório"],
       min: [0.01, "O Preço minimo é R$ 0.01. Valor fornecido {VALUE}"],
+    },
+    quantidade: {
+      type: Number,
+      required: [true, "A Quantidade é obrigatória"],
+      min: [1, "Quantidade do produto não pode ser menor que 1. Valor fornecido {VALUE}"],
+      integer: true
     },
     produto: {
       type: mongoose.Schema.Types.ObjectId,

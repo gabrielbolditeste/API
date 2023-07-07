@@ -5,14 +5,16 @@ scalar DateTime
     codigo: String
     descricao: String
     preco: Float
-    produto: String
+    quantidade: Int
+    produto: Produto
   }
 
   input ProdutoPedidoInput {
-    codigo: String
-    descricao: String
-    preco: Float
-    produto: String
+    codigo: String!
+    descricao: String!
+    preco: Float!
+    quantidade: Int!
+    produto: String!
   }
 
   type Pedido {
@@ -26,12 +28,12 @@ scalar DateTime
   }
 
   input PedidoInput {
-    produtos: [ProdutoPedidoInput]
-    descontos: [Float]
-    total: Float
+    produtos: [ProdutoPedidoInput]!
+    descontos: [Float]!
+    total: Float!
     data: DateTime
-    cliente: String
-    usuario: String
+    cliente: String!
+    usuario: String!
   }
 
   type Query {
