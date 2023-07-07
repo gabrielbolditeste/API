@@ -1,4 +1,4 @@
-import { Pedido } from "../../models/pedido.js";
+import { Pedido } from "../../../DataBase/models/pedido.js";
 
 export const pedidoResolvers = {
   Query: {

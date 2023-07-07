@@ -1,4 +1,4 @@
-import { Usuario } from "../../models/usuario.js";
+import { Usuario } from "../../../DataBase/models/usuario.js";
 
 export const usuarioResolvers = {
   Query: {

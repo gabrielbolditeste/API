@@ -34,9 +34,6 @@ interface IProduto {
   produto: Types.ObjectId
 }
 
-// const childSchema: Schema = new Schema({ name: String });
-// const ChildModel = model<Child>('Child', childSchema);
-
 const PedidoModel = new Schema<IPedido>({
   id: {
     type: String

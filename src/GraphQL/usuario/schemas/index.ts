@@ -1,5 +1,42 @@
 export const usuarioTypeDefs = `#graphql
-scalar DateTime
+  scalar DateTime
+
+  enum Permicao {
+    DEV
+    ADM
+    USER
+  }
+
+  enum Estado {
+    AC
+    AL
+    AP
+    AM
+    BA
+    CE
+    DF
+    ES
+    GO
+    MA
+    MT
+    MS
+    MG
+    PA
+    PB
+    PR
+    PE
+    PI
+    RJ
+    RN
+    RS
+    RO
+    RR
+    SC
+    SP
+    SE
+    TO
+  }
+
   type Usuario {
     _id: String
     nome: String
@@ -18,7 +55,7 @@ scalar DateTime
     ativo: Boolean
     jwt: String
     senha: String
-    permicao: String
+    permicao: Permicao
     dataCadastro: DateTime
   }
 
@@ -32,14 +69,14 @@ scalar DateTime
     complemento: String
     bairro: String
     municipio: String
-    uf: String
+    uf: Estado
     telefone: String
     email: String!
     observacoes: String
     ativo: Boolean
     jwt: String
     senha: String!
-    permicao: String!
+    permicao: Permicao!
     dataCadastro: DateTime
   }
 

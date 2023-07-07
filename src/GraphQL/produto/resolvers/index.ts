@@ -1,4 +1,4 @@
-import { Produto } from "../../models/produto.js";
+import { Produto } from "../../../DataBase/models/produto.js";
 
 export const produtoResolvers = {
   Query: {

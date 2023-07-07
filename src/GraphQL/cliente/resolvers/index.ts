@@ -1,4 +1,4 @@
-import { Cliente } from "../../models/cliente.js";
+import { Cliente } from "../../../DataBase/models/cliente.js";
 
 export const clienteResolvers = {
   Query: {

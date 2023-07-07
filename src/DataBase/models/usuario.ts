@@ -37,9 +37,8 @@ const UsuarioModel = new Schema<IUsuario>(
     },
     documento: {
       type: String,
-      // required: [true, "O Documento é obrigatório"],
-      // min: [11, "Mínimo de 11 caracteres"],
-      // max: [14, "Máximo de 14 caracteres"]
+      unique: true,
+      required: [true, "O Documento é obrigatório"],
     },
     razaoSocial: {
       type: String,
@@ -73,7 +72,15 @@ const UsuarioModel = new Schema<IUsuario>(
     },
     uf: {
       type: String,
-      default: ""
+      required: [true, "UF é obrigatório"],
+      enum: {
+        values: [
+          "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO",
+          "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
+          "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+        ],
+        message: "{VALUE} não é um estado valido"
+      }
     },
     telefone: {
       type: String,
@@ -81,6 +88,7 @@ const UsuarioModel = new Schema<IUsuario>(
     },
     email: {
       type: String,
+      unique: true,
       required: [true, "O Email é obrigatório"],
       validate: [isEmail, "{VALUE} não é um Email valido"]
     },
