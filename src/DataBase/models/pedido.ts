@@ -1,26 +1,11 @@
 import mongoose, { Schema, Types, model } from "mongoose";
 
-// interface IPedido {
-//   id: string;
-//   produtos: [
-//     {
-//       codigo: string,
-//       descricao: string,
-//       preco: number,
-//       produto: Types.ObjectId
-//     }
-//   ];
-//   descontos: Array<number>;
-//   total: number;
-//   data: Date;
-//   cliente: Types.ObjectId;
-//   usuario: Types.ObjectId;
-// }
 interface IPedido {
   id: string;
   produtos: Array<IProduto>;
   descontos: Array<number>;
   total: number;
+  condicaoPagamento: string;
   data: Date;
   cliente: Types.ObjectId;
   usuario: Types.ObjectId;
@@ -72,6 +57,11 @@ const PedidoModel = new Schema<IPedido>({
   total: {
     type: Number,
     required: [true, "O Valor Total da compra é obrigatório"]
+  },
+  condicaoPagamento : {
+    type: String,
+    maxlength: [150, "Máximo de 150 caracteres"],
+    default: ""
   },
   data: {
     type: Date,

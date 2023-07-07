@@ -4,6 +4,7 @@ export const usuarioResolvers = {
   Query: {
     async usuarios(_, { page = 1, limit = 10 }) {
       // console.log("[usuario] - ", page, limit);
+      if(limit > 50) limit = 50;
 
       const usuarios = await Usuario.find().skip(limit * (page - 1)).limit(limit);
 

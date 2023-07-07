@@ -4,6 +4,7 @@ export const clienteResolvers = {
   Query: {
     async clientes(_, { page = 1, limit = 10 }) {
       // console.log("[clientes] - ", page, limit);
+      if(limit > 50) limit = 50;
 
       const clientes = await Cliente.find().skip(limit * (page - 1)).limit(limit).populate("usuario");
 
@@ -18,6 +19,7 @@ export const clienteResolvers = {
       return cliente;
     },
     async clientesPorUsuario(_, { id, page = 1, limit = 10 }) {
+      if(limit > 50) limit = 50;
       const clientes = await Cliente.find({ usuario: id}).skip(limit * (page - 1)).limit(limit);
 
       return clientes;

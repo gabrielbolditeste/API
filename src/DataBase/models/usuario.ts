@@ -1,7 +1,7 @@
 
 import isEmail from "validator/lib/isEmail.js";
 
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 interface IUsuario {
   id: string;

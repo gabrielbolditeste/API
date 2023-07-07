@@ -4,6 +4,7 @@ export const produtoResolvers = {
   Query: {
     async produtos(_, { page = 1, limit = 10 }) {
       // console.log("[produtos] - ", page, limit);
+      if(limit > 50) limit = 50;
 
       const produtos = await Produto.find().skip(limit * (page - 1)).limit(limit);
 

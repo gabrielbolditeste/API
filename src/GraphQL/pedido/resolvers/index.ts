@@ -3,8 +3,17 @@ import { Pedido } from "../../../DataBase/models/pedido.js";
 export const pedidoResolvers = {
   Query: {
     async pedidos(_, { page = 1, limit = 10 }) {
+      if(limit > 50) limit = 50;
       
-      const pedidos = await Pedido.find().skip(limit * (page - 1)).limit(limit).populate(["usuario", "cliente"]);
+      const pedidos = await Pedido.find().skip(limit * (page - 1)).limit(limit).populate([
+        { path: "usuario" }, 
+        { path: "cliente" }, 
+        {
+          path: "produtos", 
+          populate: {
+            path: "produto",
+          }
+        }]);
 
       return pedidos;
     },
