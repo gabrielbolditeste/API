@@ -45,11 +45,12 @@ export const usuarioTypeDefs = `#graphql
   }
 
   type Query {
-    usuarios(page: Int, limit: Int): [Usuario]
+    usuarios(page: Int, limit: Int, ativo: Boolean, filtro: String): [Usuario]
     usuario(id: ID!): Usuario!
   }
 
   type Mutation {
     adicionarUsuario(usuarioInput: UsuarioInput): Usuario
+    atualizaUsuario(id: ID!, usuarioInput: UsuarioInput): Usuario
   }
 `;

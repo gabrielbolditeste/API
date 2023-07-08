@@ -2,32 +2,58 @@ import { Produto } from "../../../DataBase/models/produto.js";
 
 export const produtoResolvers = {
   Query: {
-    async produtos(_, { page = 1, limit = 10 }) {
-      // console.log("[produtos] - ", page, limit);
-      if(limit > 50) limit = 50;
+    async produtos(_, { page = 1, limit = 10, ativo = undefined, filtro = "" }) {
+      if (limit > 50) limit = 50;
 
-      const produtos = await Produto.find().skip(limit * (page - 1)).limit(limit);
-
-      return produtos;
+      switch (ativo) {
+      case undefined:
+        return await Produto.find({
+          $or: [
+            { codigo: { $regex: `${filtro}`, $options: "i" } },
+            { descricao: { $regex: `${filtro}`, $options: "i" } }
+          ]
+        })
+          .skip(limit * (page - 1))
+          .limit(limit);
+      case true:
+        return await Produto.find({
+          $or: [
+            { codigo: { $regex: `${filtro}`, $options: "i" } },
+            { descricao: { $regex: `${filtro}`, $options: "i" } }
+          ]
+        })
+          .skip(limit * (page - 1))
+          .limit(limit)
+          .where({ ativo: ativo });
+      case false:
+        return await Produto.find({
+          $or: [
+            { codigo: { $regex: `${filtro}`, $options: "i" } },
+            { descricao: { $regex: `${filtro}`, $options: "i" } }
+          ]
+        })
+          .skip(limit * (page - 1))
+          .limit(limit)
+          .where({ ativo: ativo });
+      }
     },
+
     async produto(_, { id }) {
-      // console.log("[produto ID] - ", id);
-
       const produto = await Produto.findById(id);
-
       return produto;
     },
   },
 
   Mutation: {
-    async adicionarProduto(_, { produtoInput: { ...produto } }) {
-      // console.log("[adicionarProduto] - ", produto);
-      
+    async criarProduto(_, { produtoInput: { ...produto } }) {
       const novoProduto = new Produto({ ...produto });
-
       const resposta = await novoProduto.save();
-
       return resposta;
-    }
-  }
+    },
+
+    async atualizaProduto(_, { id, produtoInput }) {
+      const produtoAtualizado = await Produto.findByIdAndUpdate({ _id: id }, { ...produtoInput }, { new: true });
+      return produtoAtualizado;
+    },
+  },
 };

@@ -40,12 +40,13 @@ scalar DateTime
   }
 
   type Query {
-    clientes(page: Int, limit: Int): [Cliente]
+    clientes(page: Int, limit: Int, filtro: String): [Cliente]
     cliente(id: ID!): Cliente!
-    clientesPorUsuario(id: ID!, page: Int, limit: Int): [Cliente]
+    clientesPorUsuario(id: ID!, page: Int, limit: Int, filtro: String): [Cliente]
   }
 
   type Mutation {
     adicionarCliente(clienteInput: ClienteInput): Cliente
+    atualizaCliente(id: ID!, clienteInput: ClienteInput): Cliente
   }
 `;

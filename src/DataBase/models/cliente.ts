@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import autopopulate from "mongoose-autopopulate";
 import isEmail from "validator/lib/isEmail.js";
 
-interface ICliente {
+export interface ICliente {
   id: string;
   nome: string;
   documento: string;
