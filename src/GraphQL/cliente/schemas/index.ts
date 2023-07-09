@@ -39,8 +39,13 @@ scalar DateTime
     usuario: String
   }
 
+  type Clientes {
+    listaDeClientes: [Cliente]
+    quantidadeClientes: Int
+  }
+
   type Query {
-    clientes(page: Int, limit: Int): [Cliente]
+    clientes(page: Int, limit: Int, filtro: String): Clientes
     cliente(id: ID!): Cliente!
     clientesPorUsuario(id: ID!, page: Int, limit: Int): [Cliente]
   }

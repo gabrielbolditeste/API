@@ -43,6 +43,17 @@ scalar DateTime
     dataCadastro: DateTime
   }
 
+  input LoginInput {
+    email: String!
+    senha: String!
+  }
+
+  input NovaSenhaInput {
+    email: String!
+    senha: String!
+    novaSenha: String!
+  }
+
   type Query {
     usuarios(page: Int, limit: Int): [Usuario]
     usuario(id: ID!): Usuario!
@@ -50,5 +61,8 @@ scalar DateTime
 
   type Mutation {
     adicionarUsuario(usuarioInput: UsuarioInput): Usuario
+    atualizaUsuario(id: ID!, usuarioInput: UsuarioInput): Usuario
+    loginUsuario(loginInput: LoginInput): Usuario
+    atualizaSenha(novaSenhaInput: NovaSenhaInput): String
   }
 `;
