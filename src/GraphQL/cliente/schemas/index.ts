@@ -52,5 +52,6 @@ scalar DateTime
 
   type Mutation {
     adicionarCliente(clienteInput: ClienteInput): Cliente
+    atualizaCliente(id: ID!, clienteInput: ClienteInput): Cliente
   }
 `;
