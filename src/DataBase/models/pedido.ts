@@ -21,6 +21,7 @@ interface IPedido {
   produtos: Array<IProduto>;
   descontos: Array<number>;
   total: number;
+  condicaoPagamento: string;
   data: Date;
   cliente: Types.ObjectId;
   usuario: Types.ObjectId;
@@ -75,6 +76,10 @@ const PedidoModel = new Schema<IPedido>({
   total: {
     type: Number,
     required: [true, "O Valor Total da compra é obrigatório"]
+  },
+  condicaoPagamento: {
+    type: String,
+    default: ""
   },
   data: {
     type: Date,

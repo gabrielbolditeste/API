@@ -32,15 +32,33 @@ scalar DateTime
     complemento: String
     bairro: String
     municipio: String
-    uf: String
+    uf: Estado
     telefone: String
     email: String!
     observacoes: String
     ativo: Boolean
     jwt: String
     senha: String!
-    permicao: String!
+    permicao: Permicao!
     dataCadastro: DateTime
+  }
+
+  input UsuarioUpdateInput {
+    nome: String
+    documento: String
+    razaoSocial: String
+    cep: String
+    endereco: String
+    numero: String
+    complemento: String
+    bairro: String
+    municipio: String
+    uf: Estado
+    telefone: String
+    email: String
+    observacoes: String
+    ativo: Boolean
+    permicao: Permicao
   }
 
   input LoginInput {
@@ -54,14 +72,19 @@ scalar DateTime
     novaSenha: String!
   }
 
+  type Usuarios {
+    listaUsuarios: [Usuario]
+    quantidadeUsuarios: Int
+  }
+
   type Query {
-    usuarios(page: Int, limit: Int): [Usuario]
+    usuarios(page: Int, limit: Int, ativo: Boolean, filtro: String): Usuarios
     usuario(id: ID!): Usuario!
   }
 
   type Mutation {
     adicionarUsuario(usuarioInput: UsuarioInput): Usuario
-    atualizaUsuario(id: ID!, usuarioInput: UsuarioInput): Usuario
+    atualizaUsuario(id: ID!, usuarioInput: UsuarioUpdateInput): Usuario
     loginUsuario(loginInput: LoginInput): Usuario
     atualizaSenha(novaSenhaInput: NovaSenhaInput): String
   }

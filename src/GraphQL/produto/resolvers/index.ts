@@ -2,40 +2,48 @@ import { Produto } from "../../../DataBase/models/produto.js";
 
 export const produtoResolvers = {
   Query: {
-    async produtos(_, { page = 1, limit = 10, ativo = undefined, filtro = "" }) {
+    async produtos(_, { page = 0, limit = 10, ativo = undefined, filtro = "" }) {
       if (limit > 50) limit = 50;
 
+      const quantidadeProdutos = await Produto.count();
+
+      let listaProdutos;
       switch (ativo) {
       case undefined:
-        return await Produto.find({
+        listaProdutos = await Produto.find({
           $or: [
             { codigo: { $regex: `${filtro}`, $options: "i" } },
             { descricao: { $regex: `${filtro}`, $options: "i" } }
           ]
         })
-          .skip(limit * (page - 1))
+          .skip(limit * page)
           .limit(limit);
+        break;
       case true:
-        return await Produto.find({
+        listaProdutos = await Produto.find({
           $or: [
             { codigo: { $regex: `${filtro}`, $options: "i" } },
             { descricao: { $regex: `${filtro}`, $options: "i" } }
           ]
         })
-          .skip(limit * (page - 1))
+          .skip(limit * page)
           .limit(limit)
           .where({ ativo: ativo });
+        break;
       case false:
-        return await Produto.find({
+        listaProdutos = await Produto.find({
           $or: [
             { codigo: { $regex: `${filtro}`, $options: "i" } },
             { descricao: { $regex: `${filtro}`, $options: "i" } }
           ]
         })
-          .skip(limit * (page - 1))
+          .skip(limit * page)
           .limit(limit)
           .where({ ativo: ativo });
+        break;
       }
+
+      return { listaProdutos, quantidadeProdutos };
     },
 
     async produto(_, { id }) {

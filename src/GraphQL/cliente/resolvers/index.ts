@@ -2,7 +2,7 @@ import { Cliente } from "../../../DataBase/models/cliente.js";
 
 export const clienteResolvers = {
   Query: {
-    async clientes(_, { page = 1, limit = 10, filtro = "" }) {
+    async clientes(_, { page = 0, limit = 10, filtro = "" }) {
       if (limit > 50) limit = 50;
       const clientes = await Cliente.find({
         $or: [
@@ -13,11 +13,13 @@ export const clienteResolvers = {
           { inscricaoEstadual: { $regex: `${filtro}`, $options: "i" } }
         ]
       })
-        .skip(limit * (page - 1))
+        .skip(limit * page)
         .limit(limit)
         .populate("usuario");
-      
-      return clientes;
+
+      const quantidadeClientes = await Cliente.count();
+
+      return { listaDeClientes: clientes, quantidadeClientes };
     },
 
     async cliente(_, { id }) {
@@ -25,9 +27,9 @@ export const clienteResolvers = {
       return cliente;
     },
 
-    async clientesPorUsuario(_, { id, page = 1, limit = 10, filtro = "" }) {
+    async clientesPorUsuario(_, { id, page = 0, limit = 10, filtro = "" }) {
       if (limit > 50) limit = 50;
-      
+
       const clientes = await Cliente.find({
         $or: [
           { nome: { $regex: `${filtro}`, $options: "i" } },
@@ -37,7 +39,7 @@ export const clienteResolvers = {
           { inscricaoEstadual: { $regex: `${filtro}`, $options: "i" } }
         ]
       })
-        .skip(limit * (page - 1))
+        .skip(limit * page)
         .limit(limit)
         .where({ usuario: id });
 
@@ -54,8 +56,8 @@ export const clienteResolvers = {
 
     async atualizaCliente(_, { id, clienteInput }) {
       const clienteAtualizado = await Cliente.findOneAndUpdate(
-        { _id: id }, 
-        { ...clienteInput }, 
+        { _id: id },
+        { ...clienteInput },
         { new: true }
       );
 

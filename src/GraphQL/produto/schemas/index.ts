@@ -18,8 +18,13 @@ export const produtoTypeDefs = `#graphql
     ativo: Boolean
   }
 
+  type Produtos {
+    listaProdutos: [Produto]
+    quantidadeProdutos: Int
+  }
+
   type Query {
-    produtos(page: Int, limit: Int, ativo: Boolean, filtro: String): [Produto]
+    produtos(page: Int, limit: Int, ativo: Boolean, filtro: String): Produtos
     produto(id: ID!): Produto!
   }
 

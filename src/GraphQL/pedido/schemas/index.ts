@@ -22,6 +22,7 @@ scalar DateTime
     produtos: [ProdutoPedido]
     descontos: [Float]
     total: Float
+    condicaoPagamento: String
     data: DateTime
     cliente: Cliente
     usuario: Usuario
@@ -31,6 +32,7 @@ scalar DateTime
     produtos: [ProdutoPedidoInput]!
     descontos: [Float]!
     total: Float!
+    condicaoPagamento: String!
     data: DateTime
     cliente: String!
     usuario: String!

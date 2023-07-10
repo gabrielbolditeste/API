@@ -3,7 +3,7 @@ import isEmail from "validator/lib/isEmail.js";
 
 import { Schema, model } from "mongoose";
 
-interface IUsuario {
+export interface IUsuario {
   id: string;
   senha: string;
   nome: string;

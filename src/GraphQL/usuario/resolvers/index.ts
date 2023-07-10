@@ -1,42 +1,50 @@
-import { Usuario } from "../../../DataBase/models/usuario.js";
+import { IUsuario, Usuario } from "../../../DataBase/models/usuario.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
 
 export const usuarioResolvers = {
   Query: {
-    async usuarios(_, { page = 1, limit = 10, ativo = undefined, filtro = "" }) {
+    async usuarios(_, { page = 0, limit = 10, ativo = undefined, filtro = "" }) {
       if (limit > 50) limit = 50;
+
+      const quantidadeUsuarios = await Usuario.count();
+      let listaUsuarios: IUsuario[];
 
       switch (ativo) {
       case undefined:
-        return await Usuario.find({
+        listaUsuarios = await Usuario.find({
           $or: [
             { nome: { $regex: `${filtro}`, $options: "i" } },
             { email: { $regex: `${filtro}`, $options: "i" } },
             { documento: { $regex: `${filtro}`, $options: "i" } },
             { razaoSocial: { $regex: `${filtro}`, $options: "i" } }
           ]
-        }).skip(limit * (page - 1)).limit(limit);
+        }).skip(limit * page).limit(limit).where({ permicao: "USER" });
+        break;
       case true:
-        return await Usuario.find({
+        listaUsuarios = await Usuario.find({
           $or: [
             { nome: { $regex: `${filtro}`, $options: "i" } },
             { email: { $regex: `${filtro}`, $options: "i" } },
             { documento: { $regex: `${filtro}`, $options: "i" } },
             { razaoSocial: { $regex: `${filtro}`, $options: "i" } }
           ]
-        }).skip(limit * (page - 1)).limit(limit).where({ ativo: ativo });
+        }).skip(limit * page).limit(limit).where({ ativo: ativo, permicao: "USER" });
+        break;
       case false:
-        return await Usuario.find({
+        listaUsuarios = await Usuario.find({
           $or: [
             { nome: { $regex: `${filtro}`, $options: "i" } },
             { email: { $regex: `${filtro}`, $options: "i" } },
             { documento: { $regex: `${filtro}`, $options: "i" } },
             { razaoSocial: { $regex: `${filtro}`, $options: "i" } }
           ]
-        }).skip(limit * (page - 1)).limit(limit).where({ ativo: ativo });
+        }).skip(limit * page).limit(limit).where({ ativo: ativo, permicao: "USER" });
+        break;
       }
+
+      return { listaUsuarios, quantidadeUsuarios };
     },
 
     async usuario(_, { id }) {
