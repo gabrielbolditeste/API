@@ -17,8 +17,7 @@ export const usuarioResolvers = {
           $or: [
             { nome: { $regex: `${filtro}`, $options: "i" } },
             { email: { $regex: `${filtro}`, $options: "i" } },
-            { documento: { $regex: `${filtro}`, $options: "i" } },
-            { razaoSocial: { $regex: `${filtro}`, $options: "i" } }
+            { documento: { $regex: `${filtro}`, $options: "i" } }
           ]
         }).skip(limit * page).limit(limit).where({ permicao: "USER" });
         break;
@@ -27,8 +26,7 @@ export const usuarioResolvers = {
           $or: [
             { nome: { $regex: `${filtro}`, $options: "i" } },
             { email: { $regex: `${filtro}`, $options: "i" } },
-            { documento: { $regex: `${filtro}`, $options: "i" } },
-            { razaoSocial: { $regex: `${filtro}`, $options: "i" } }
+            { documento: { $regex: `${filtro}`, $options: "i" } }
           ]
         }).skip(limit * page).limit(limit).where({ ativo: ativo, permicao: "USER" });
         break;
@@ -37,8 +35,7 @@ export const usuarioResolvers = {
           $or: [
             { nome: { $regex: `${filtro}`, $options: "i" } },
             { email: { $regex: `${filtro}`, $options: "i" } },
-            { documento: { $regex: `${filtro}`, $options: "i" } },
-            { razaoSocial: { $regex: `${filtro}`, $options: "i" } }
+            { documento: { $regex: `${filtro}`, $options: "i" } }
           ]
         }).skip(limit * page).limit(limit).where({ ativo: ativo, permicao: "USER" });
         break;

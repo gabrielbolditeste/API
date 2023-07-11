@@ -22,21 +22,21 @@ scalar DateTime
   }
 
   input ClienteInput {
-    nome: String
-    documento: String
+    nome: String!
+    documento: String!
     inscricaoEstadual: String
-    razaoSocial: String
+    razaoSocial: String!
     cep: String
     endereco: String
     numero: String
     complemento: String
     bairro: String
-    municipio: String
-    uf: String
+    municipio: String!
+    uf: String!
     telefone: String
-    email: String
+    email: String!
     observacoes: String
-    usuario: String
+    usuario: String!
   }
 
   type Clientes {

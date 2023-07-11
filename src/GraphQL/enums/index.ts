@@ -1,5 +1,5 @@
 export const enumsTypeDefs = `#graphql
-  enum Permicao {
+  enum Permissao {
     DEV
     ADM
     USER

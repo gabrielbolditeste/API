@@ -4,7 +4,6 @@ scalar DateTime
     _id: String
     nome: String
     documento: String
-    razaoSocial: String
     cep: String
     endereco: String
     numero: String
@@ -18,35 +17,33 @@ scalar DateTime
     ativo: Boolean
     jwt: String
     senha: String
-    permicao: String
+    permissao: String
     dataCadastro: DateTime
   }
 
   input UsuarioInput {
     nome: String!
     documento: String!
-    razaoSocial: String!
     cep: String
     endereco: String
     numero: String
     complemento: String
     bairro: String
     municipio: String
-    uf: Estado
+    uf: Estado!
     telefone: String
     email: String!
     observacoes: String
     ativo: Boolean
     jwt: String
     senha: String!
-    permicao: Permicao!
+    permissao: Permissao!
     dataCadastro: DateTime
   }
 
   input UsuarioUpdateInput {
     nome: String
     documento: String
-    razaoSocial: String
     cep: String
     endereco: String
     numero: String
@@ -58,7 +55,7 @@ scalar DateTime
     email: String
     observacoes: String
     ativo: Boolean
-    permicao: Permicao
+    permissao: Permissao
   }
 
   input LoginInput {

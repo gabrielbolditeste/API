@@ -2,6 +2,7 @@ import { Schema, model, Types } from "mongoose";
 import mongoose from "mongoose";
 import autopopulate from "mongoose-autopopulate";
 import isEmail from "validator/lib/isEmail.js";
+import { Estado } from "../enums/Estados.js";
 
 interface ICliente {
   id: string;
@@ -24,58 +25,75 @@ interface ICliente {
 
 const ClienteModel = new Schema<ICliente>(
   {
-    id: { 
-      type: String 
+    id: {
+      type: String
     },
-    nome: { 
-      type: String 
+    nome: {
+      type: String,
+      required: [true, "O campo NOME não pode ser nulo"]
     },
-    documento: { 
-      type: String, 
-      unique: true 
+    documento: {
+      type: String,
+      required: [true, "O campo DOCUMENTO não pode ser nulo"],
+      unique: true
     },
-    inscricaoEstadual: { 
-      type: String 
+    inscricaoEstadual: {
+      type: String,
+      default: ""
     },
-    razaoSocial: { 
-      type: String 
+    razaoSocial: {
+      type: String,
+      required: [true, "O campo RAZÃO SOCIAL não pode ser nulo"]
     },
-    cep: { 
-      type: String 
+    cep: {
+      type: String,
+      max: [9, "Máximo de 9 caracteres"],
+      default: ""
     },
-    endereco: { 
-      type: String 
+    endereco: {
+      type: String,
+      default: ""
     },
-    numero: { 
-      type: String 
+    numero: {
+      type: String,
+      default: ""
     },
-    complemento: { 
-      type: String 
+    complemento: {
+      type: String,
+      default: ""
     },
-    bairro: { 
-      type: String 
+    bairro: {
+      type: String,
+      default: ""
     },
-    municipio: { 
-      type: String 
+    municipio: {
+      type: String,
+      required: [true, "O campo MUNICÍPIO não pode ser nulo"],
+      min: [3, "Mínimo de 3 caracteres"]
     },
-    uf: { 
-      type: String 
+    uf: {
+      type: String,
+      required: [true, "O campo UF não pode ser nulo"],
+      enum: Estado
     },
-    telefone: { 
-      type: String 
+    telefone: {
+      type: String,
+      default: ""
     },
     email: {
       type: String,
-      // validate: [isEmail, "{VALUE} não é um Email valido"]
-      default: ""
+      required: [true, "O campo E-MAIL não pode ser nulo"],
+      validate: [isEmail, "{VALUE} não é um Email valido"]
     },
-    observacoes: { 
-      type: String 
+    observacoes: {
+      type: String,
+      default: ""
     },
     usuario: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "usuarios",
-      autopopulate: true
+      autopopulate: true,
+      required: [true, "O campo USUARIO não pode ser nulo"]
     }
   },
   {
