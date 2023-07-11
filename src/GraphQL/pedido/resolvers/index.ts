@@ -2,22 +2,22 @@ import { Pedido } from "../../../DataBase/models/pedido.js";
 
 export const pedidoResolvers = {
   Query: {
-    async pedidos(_, { page = 1, limit = 10 }) {
+    async pedidos(_, { page = 0, limit = 10 }) {
       if (limit > 100) limit = 100;
 
       const pedidos = await Pedido.find()
-        .skip(limit * (page - 1))
+        .skip(limit * page)
         .limit(limit)
         .sort({ data: -1 })
         .populate([
-        { path: "usuario" },
-        { path: "cliente" },
-        {
-          path: "produtos",
-          populate: {
-            path: "produto",
-          }
-        }]);
+          { path: "usuario" },
+          { path: "cliente" },
+          {
+            path: "produtos",
+            populate: {
+              path: "produto",
+            }
+          }]);
       return pedidos;
     },
 

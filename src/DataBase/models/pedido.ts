@@ -1,30 +1,22 @@
 import mongoose, { Schema, Types, model } from "mongoose";
 
-// interface IPedido {
-//   id: string;
-//   produtos: [
-//     {
-//       codigo: string,
-//       descricao: string,
-//       preco: number,
-//       produto: Types.ObjectId
-//     }
-//   ];
-//   descontos: Array<number>;
-//   total: number;
-//   data: Date;
-//   cliente: Types.ObjectId;
-//   usuario: Types.ObjectId;
-// }
 interface IPedido {
   id: string;
+  cliente: Types.ObjectId;
+  usuario: Types.ObjectId;
   produtos: Array<IProduto>;
   descontos: Array<number>;
   total: number;
-  condicaoPagamento: string;
   data: Date;
-  cliente: Types.ObjectId;
-  usuario: Types.ObjectId;
+
+  condicaoPagamento: string;
+  transportador: string;
+  codigoDeBarras: string;
+  observacoes: string;
+  prazoDeEntrega: string;
+  telefone: string;
+  entregaOuColeta: string;
+  pedidoEspecial: string;
 }
 
 interface IProduto {
@@ -34,9 +26,6 @@ interface IProduto {
   quantidade: number,
   produto: Types.ObjectId
 }
-
-// const childSchema: Schema = new Schema({ name: String });
-// const ChildModel = model<Child>('Child', childSchema);
 
 const PedidoModel = new Schema<IPedido>({
   id: {
@@ -64,7 +53,7 @@ const PedidoModel = new Schema<IPedido>({
     },
     produto: {
       type: mongoose.Schema.Types.ObjectId,
-      // required: [true, "O ID do produto é obrigatório"],
+      required: [true, "O ID do produto é obrigatório"],
       ref: "produtos",
       autopopulate: true
     }
@@ -87,15 +76,43 @@ const PedidoModel = new Schema<IPedido>({
   },
   cliente: {
     type: mongoose.Schema.Types.ObjectId,
-    // required: [true, "O ID do cliente é obrigatório"],
+    required: [true, "O ID do cliente é obrigatório"],
     ref: "clientes",
     autopopulate: true
   },
   usuario: {
     type: mongoose.Schema.Types.ObjectId,
-    // required: [true, "O ID do usuario é obrigatório"],
+    required: [true, "O ID do usuario é obrigatório"],
     ref: "usuarios",
     autopopulate: true
+  },
+  transportador: {
+    type: String,
+    default: ""
+  },
+  codigoDeBarras: {
+    type: String,
+    default: ""
+  },
+  observacoes: {
+    type: String,
+    default: ""
+  },
+  prazoDeEntrega: {
+    type: String,
+    default: ""
+  },
+  telefone: {
+    type: String,
+    default: ""
+  },
+  entregaOuColeta: {
+    type: String,
+    default: ""
+  },
+  pedidoEspecial: {
+    type: String,
+    default: ""
   }
 });
 

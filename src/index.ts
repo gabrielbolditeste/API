@@ -3,7 +3,8 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { connect } from "mongoose";
 import { typeDefs, resolvers } from "./GraphQL/index.js";
 
-const MONGODB = "mongodb+srv://root:root@cluster0.kh8rbcy.mongodb.net/KMBv2?retryWrites=true&w=majority";
+// const MONGODB = "mongodb+srv://root:root@cluster0.kh8rbcy.mongodb.net/KMBv2?retryWrites=true&w=majority";
+const MONGODB = "mongodb+srv://root:root@cluster0.kh8rbcy.mongodb.net/KMBv2TESTE?retryWrites=true&w=majority";
 
 await connect(MONGODB);
 

@@ -53,7 +53,7 @@ export const produtoResolvers = {
   },
 
   Mutation: {
-    async criarProduto(_, { produtoInput: { ...produto } }) {
+    async adicionarProduto(_, { produtoInput: { ...produto } }) {
       const novoProduto = new Produto({ ...produto });
       const resposta = await novoProduto.save();
       return resposta;

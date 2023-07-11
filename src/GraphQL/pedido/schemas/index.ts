@@ -2,11 +2,11 @@
 export const pedidoTypeDefs = `#graphql
 scalar DateTime
   type ProdutoPedido {
-    codigo: String
-    descricao: String
-    preco: Float
-    quantidade: Int
-    produto: Produto
+    codigo: String!
+    descricao: String!
+    preco: Float!
+    quantidade: Int!
+    produto: Produto!
   }
 
   input ProdutoPedidoInput {
@@ -26,16 +26,30 @@ scalar DateTime
     data: DateTime
     cliente: Cliente
     usuario: Usuario
+    transportador: String
+    codigoDeBarras: String
+    observacoes: String
+    prazoDeEntrega: String
+    telefone: String
+    entregaOuColeta: String
+    pedidoEspecial: String
   }
 
   input PedidoInput {
     produtos: [ProdutoPedidoInput]!
-    descontos: [Float]!
+    descontos: [Float]
     total: Float!
     condicaoPagamento: String!
     data: DateTime
     cliente: String!
     usuario: String!
+    transportador: String
+    codigoDeBarras: String
+    observacoes: String
+    prazoDeEntrega: String
+    telefone: String
+    entregaOuColeta: String
+    pedidoEspecial: String
   }
 
   type Query {
