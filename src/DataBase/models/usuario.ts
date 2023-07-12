@@ -91,13 +91,6 @@ const UsuarioModel = new Schema<IUsuarioModel>(
     senha: {
       type: String,
       required: [true, "A Senha é obrigatória"],
-      validate: {
-        validator: (senha) => {
-          return senha < 6;
-        }
-      },
-      min: [6, "Senha deve ter no mínimo 6 caracteres"],
-      max: [25, "Senha deve ter no máximo 25 caracteres"]
     },
     ativo: {
       type: Boolean,

@@ -58,6 +58,6 @@ scalar DateTime
   }
 
   type Mutation {
-    adicionarPedido(pedidoInput: PedidoInput): Pedido
+    adicionarPedido(pedidoInput: PedidoInput): String
   }
 `;

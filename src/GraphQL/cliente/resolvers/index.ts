@@ -50,7 +50,7 @@ export const clienteResolvers = {
   Mutation: {
     async adicionarCliente(_, { clienteInput: { ...cliente } }) {
       const novoCliente = new Cliente({ ...cliente });
-      const resposta = await novoCliente.save();
+      const resposta = (await novoCliente.save()).populate( "usuario" );
       return resposta;
     },
 
@@ -59,7 +59,7 @@ export const clienteResolvers = {
         { _id: id },
         { ...clienteInput },
         { new: true }
-      );
+      ).populate("usuario");
 
       return clienteAtualizado;
     }

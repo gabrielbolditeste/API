@@ -1,7 +1,6 @@
 import { IUsuarioModel, Usuario } from "../../../DataBase/models/usuario.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { GraphQLError } from "graphql";
 
 export const usuarioResolvers = {
   Query: {
@@ -60,38 +59,45 @@ export const usuarioResolvers = {
           erro("Documento ou E-mail já cadastrado.");
         }
 
-        const senhaCryptografada = await bcrypt.hash(usuario.senha, 10);
-        const novoUsuario = new Usuario({
-          ...usuario,
-          email: usuario.email.toLowerCase(),
-          senha: senhaCryptografada,
-          jwt: jwt.sign({
-            nome: usuario.nome,
-            email: usuario.email,
-            permissao: usuario.permissao,
-          }, "ISSO_DEVERIA_SER_PRIVATE_KEY")
-        });
-
-        return await novoUsuario.save();
+        if (usuario.senha.length >= 6) {
+          const senhaCryptografada = await bcrypt.hash(usuario.senha, 10);
+          const novoUsuario = new Usuario({
+            ...usuario,
+            email: usuario.email.toLowerCase(),
+            senha: senhaCryptografada,
+            jwt: jwt.sign({
+              nome: usuario.nome,
+              email: usuario.email,
+              permissao: usuario.permissao,
+            }, "ISSO_DEVERIA_SER_PRIVATE_KEY")
+          });
+          return await novoUsuario.save();
+        } else {
+          erro("Senha deve ter mais de 6 caracteres");
+        }
       } catch (error) {
-        erro("Documento ou E-mail já cadastrado.");
+        erro("Erro...");
       }
     },
 
     async loginUsuario(_, { loginInput: { email, senha } }) {
-      const usuario = await Usuario.findOne({ email: email.toLowerCase() });
+      try {
+        const usuario = await Usuario.findOne({ email: email.toLowerCase() });
 
-      if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
-        usuario.jwt = jwt.sign({
-          nome: usuario.nome,
-          email: usuario.email,
-          permissao: usuario.permissao,
-        }, 
-        "ISSO_DEVERIA_SER_PRIVATE_KEY"
-        );
-        return usuario;
-      } else {
-        erro("E-mail ou Senha invalido.");
+        if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
+          usuario.jwt = jwt.sign({
+            nome: usuario.nome,
+            email: usuario.email,
+            permissao: usuario.permissao,
+          },
+          "ISSO_DEVERIA_SER_PRIVATE_KEY"
+          );
+          return usuario;
+        } else {
+          erro("Email ou Senha invalidos.");
+        }
+      } catch (error) {
+        erro(error);
       }
     },
 
@@ -99,7 +105,7 @@ export const usuarioResolvers = {
       try {
         const usuario = await Usuario.findOne({ email });
 
-        if(usuario === null) {
+        if (usuario === null) {
           erro("Email não encontrado");
         } else if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
           usuario.jwt = jwt.sign({
@@ -113,9 +119,8 @@ export const usuarioResolvers = {
         } else {
           erro("Senha Atual incorreta");
         }
-
       } catch (error) {
-        erro(`${error.message}`);
+        erro("Erro...");
       }
     },
 
@@ -134,10 +139,6 @@ export const usuarioResolvers = {
   }
 };
 
-const erro = (msg: string) => {
-  throw new GraphQLError(`${msg}`, {
-    extensions: {
-      code: "BAD_USER_INPUT",
-    },
-  });
+const erro = (msg?: string) => {
+  console.log("[ERROR] - ", msg);
 };

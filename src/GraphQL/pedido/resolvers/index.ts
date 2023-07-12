@@ -40,7 +40,12 @@ export const pedidoResolvers = {
 
       const novoPedido = new Pedido({ ...pedido });
 
-      return await novoPedido.save();
+      const pedidoFeito =  await novoPedido.save();
+      if(pedidoFeito) {
+        return "Pedido cadastrado";
+      } else {
+        console.log("Error");
+      }
     }
   }
 };
