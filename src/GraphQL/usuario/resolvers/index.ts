@@ -65,6 +65,11 @@ export const usuarioResolvers = {
           ...usuario,
           email: usuario.email.toLowerCase(),
           senha: senhaCryptografada,
+          jwt: jwt.sign({
+            nome: usuario.nome,
+            email: usuario.email,
+            permissao: usuario.permissao,
+          }, "ISSO_DEVERIA_SER_PRIVATE_KEY")
         });
 
         return await novoUsuario.save();
@@ -77,7 +82,13 @@ export const usuarioResolvers = {
       const usuario = await Usuario.findOne({ email: email.toLowerCase() });
 
       if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
-        usuario.jwt = jwt.sign({ _id: usuario._id, email }, "ISSO_DEVERIA_SER_PRIVATE_KEY", { expiresIn: "2h" });
+        usuario.jwt = jwt.sign({
+          nome: usuario.nome,
+          email: usuario.email,
+          permissao: usuario.permissao,
+        }, 
+        "ISSO_DEVERIA_SER_PRIVATE_KEY"
+        );
         return usuario;
       } else {
         erro("E-mail ou Senha invalido.");
@@ -88,17 +99,23 @@ export const usuarioResolvers = {
       try {
         const usuario = await Usuario.findOne({ email });
 
-        if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
-          usuario.jwt = jwt.sign({ _id: usuario._id, email }, "ISSO_DEVERIA_SER_PRIVATE_KEY", { expiresIn: "2h" });
+        if(usuario === null) {
+          erro("Email não encontrado");
+        } else if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
+          usuario.jwt = jwt.sign({
+            nome: usuario.nome,
+            email: usuario.email,
+            permissao: usuario.permissao,
+          }, "ISSO_DEVERIA_SER_PRIVATE_KEY");
           usuario.senha = await bcrypt.hash(novaSenha, 10);
+          await usuario.save();
+          return "Nova senha Salva";
         } else {
           erro("Senha Atual incorreta");
         }
 
-        await usuario.save();
-        return "Nova senha Salva";
       } catch (error) {
-        erro("Erro interno do sistema.");
+        erro(`${error.message}`);
       }
     },
 
