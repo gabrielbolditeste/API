@@ -4,7 +4,7 @@ import { Schema, model } from "mongoose";
 import { Estado } from "../enums/Estados.js";
 import { Permissao } from "../enums/Permissao.js";
 
-export interface IUsuario {
+export interface IUsuarioModel {
   id: string;
   senha: string;
   nome: string;
@@ -25,7 +25,7 @@ export interface IUsuario {
   dataCadastro: Date;
 }
 
-const UsuarioModel = new Schema<IUsuario>(
+const UsuarioModel = new Schema<IUsuarioModel>(
   {
     id: {
       type: String
@@ -117,4 +117,4 @@ const UsuarioModel = new Schema<IUsuario>(
   }
 );
 
-export const Usuario = model<IUsuario>("usuarios", UsuarioModel);
+export const Usuario = model<IUsuarioModel>("usuarios", UsuarioModel);

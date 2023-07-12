@@ -1,4 +1,4 @@
-import { IUsuario, Usuario } from "../../../DataBase/models/usuario.js";
+import { IUsuarioModel, Usuario } from "../../../DataBase/models/usuario.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
@@ -9,7 +9,7 @@ export const usuarioResolvers = {
       if (limit > 50) limit = 50;
 
       const quantidadeUsuarios = await Usuario.count();
-      let listaUsuarios: IUsuario[];
+      let listaUsuarios: IUsuarioModel[];
 
       switch (ativo) {
       case undefined:
@@ -49,59 +49,78 @@ export const usuarioResolvers = {
       return usuario;
     }
   },
+
   Mutation: {
     async adicionarUsuario(_, { usuarioInput: { ...usuario } }) {
-      const novoUsuario = new Usuario({ ...usuario });
-      const resposta = await novoUsuario.save();
-      return resposta;
+      try {
+        const oldUserEmail = await Usuario.findOne({ email: usuario.email });
+        const oldUserCpf = await Usuario.findOne({ documento: usuario.documento });
+
+        if (oldUserEmail || oldUserCpf) {
+          erro("Documento ou E-mail já cadastrado.");
+        }
+
+        const senhaCryptografada = await bcrypt.hash(usuario.senha, 10);
+        const novoUsuario = new Usuario({
+          ...usuario,
+          email: usuario.email.toLowerCase(),
+          senha: senhaCryptografada,
+        });
+
+        return await novoUsuario.save();
+      } catch (error) {
+        erro("Documento ou E-mail já cadastrado.");
+      }
     },
 
     async loginUsuario(_, { loginInput: { email, senha } }) {
-      const usuario = await Usuario.findOne({ email });
+      const usuario = await Usuario.findOne({ email: email.toLowerCase() });
 
       if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
-        const token = jwt.sign({ _id: usuario._id, email }, "ISSO_DEVERIA_SER_PRIVATE_KEY", { expiresIn: "2h" });
-
-        usuario.jwt = token;
+        usuario.jwt = jwt.sign({ _id: usuario._id, email }, "ISSO_DEVERIA_SER_PRIVATE_KEY", { expiresIn: "2h" });
         return usuario;
       } else {
-        throw new GraphQLError("E-mail ou Senha invalidos", {
-          extensions: {
-            code: "BAD_USER_INPUT",
-          },
-        });
+        erro("E-mail ou Senha invalido.");
       }
     },
 
     async atualizaSenha(_, { novaSenhaInput: { email, senha, novaSenha } }) {
-      console.log("[Email] - ", email);
-      console.log("[Senha] - ", senha);
-      console.log("[NovaSenha] - ", novaSenha);
+      try {
+        const usuario = await Usuario.findOne({ email });
 
+        if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
+          usuario.jwt = jwt.sign({ _id: usuario._id, email }, "ISSO_DEVERIA_SER_PRIVATE_KEY", { expiresIn: "2h" });
+          usuario.senha = await bcrypt.hash(novaSenha, 10);
+        } else {
+          erro("Senha Atual incorreta");
+        }
 
-      const usuario = await Usuario.findOne({ email });
-      console.log("[Usuario] - ", usuario);
-
-      if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
-        const token = jwt.sign({ _id: usuario._id, email }, "ISSO_DEVERIA_SER_PRIVATE_KEY", { expiresIn: "2h" });
-
-        usuario.jwt = token;
-        usuario.senha = await bcrypt.hash(novaSenha, 10);
-      } else {
-        throw new GraphQLError("Senha Atual incorreta", {
-          extensions: {
-            code: "BAD_USER_INPUT",
-          },
-        });
+        await usuario.save();
+        return "Nova senha Salva";
+      } catch (error) {
+        erro("Erro interno do sistema.");
       }
-
-      await usuario.save();
-      return "Nova senha Salva";
     },
 
     async atualizaUsuario(_, { id, usuarioInput }) {
-      const usuarioAtualizado = await Usuario.findByIdAndUpdate({ _id: id }, { ...usuarioInput }, { new: true });
-      return usuarioAtualizado;
+      try {
+        const usuarioAtualizado = await Usuario.findByIdAndUpdate({ _id: id }, { ...usuarioInput }, { new: true });
+        return usuarioAtualizado;
+      } catch (error) {
+        if (error.code === 11000) {
+          erro("Email já cadastrado no sistema");
+        } else {
+          erro("Erro interno do sistema.");
+        }
+      }
     }
   }
+};
+
+const erro = (msg: string) => {
+  throw new GraphQLError(`${msg}`, {
+    extensions: {
+      code: "BAD_USER_INPUT",
+    },
+  });
 };

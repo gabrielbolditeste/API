@@ -2,7 +2,7 @@ export const usuarioTypeDefs = `#graphql
 scalar DateTime
   type Usuario {
     _id: String
-    nome: String
+    nome: String!
     documento: String
     cep: String
     endereco: String
@@ -12,12 +12,11 @@ scalar DateTime
     municipio: String
     uf: String
     telefone: String
-    email: String
+    email: String!
     observacoes: String
     ativo: Boolean
-    jwt: String
-    senha: String
-    permissao: String
+    jwt: String!
+    permissao: String!
     dataCadastro: DateTime
   }
 
@@ -81,8 +80,8 @@ scalar DateTime
 
   type Mutation {
     adicionarUsuario(usuarioInput: UsuarioInput): Usuario
-    atualizaUsuario(id: ID!, usuarioInput: UsuarioUpdateInput): Usuario
+    atualizaUsuario(id: ID!, usuarioInput: UsuarioUpdateInput): Usuario!
     loginUsuario(loginInput: LoginInput): Usuario
-    atualizaSenha(novaSenhaInput: NovaSenhaInput): String
+    atualizaSenha(novaSenhaInput: NovaSenhaInput): String!
   }
 `;
