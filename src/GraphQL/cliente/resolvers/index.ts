@@ -58,7 +58,7 @@ export const clienteResolvers = {
       const clienteAtualizado = await Cliente.findOneAndUpdate(
         { _id: id },
         { ...clienteInput },
-        { new: true }
+        { new: true, runValidators: true }
       ).populate("usuario");
 
       return clienteAtualizado;
