@@ -1,5 +1,6 @@
 import { IUsuarioModel, Usuario } from "../../../DataBase/models/usuario.js";
 import bcrypt from "bcrypt";
+import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
 
 export const usuarioResolvers = {
@@ -94,10 +95,12 @@ export const usuarioResolvers = {
           );
           return usuario;
         } else {
+          throw new GraphQLError("Erro ao efetuar login");
           erro("Email ou Senha invalidos.");
         }
       } catch (error) {
         erro(error);
+        throw new GraphQLError("Erro ao efetuar login");
       }
     },
 
