@@ -96,10 +96,8 @@ export const usuarioResolvers = {
           return usuario;
         } else {
           throw new GraphQLError("Erro ao efetuar login");
-          erro("Email ou Senha invalidos.");
         }
       } catch (error) {
-        erro(error);
         throw new GraphQLError("Erro ao efetuar login");
       }
     },

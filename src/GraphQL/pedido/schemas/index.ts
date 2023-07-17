@@ -52,8 +52,13 @@ scalar DateTime
     pedidoEspecial: String
   }
 
+  type Pedidos {
+    listaPedidos: [Pedido]
+    quantidadePedidos: Int
+  }
+
   type Query {
-    pedidos(page: Int, limit: Int): [Pedido]
+    pedidos(page: Int, limit: Int): Pedidos
     pedido(id: ID!): Pedido!
   }
 
