@@ -19,7 +19,7 @@ export const usuarioResolvers = {
             { email: { $regex: `${filtro}`, $options: "i" } },
             { documento: { $regex: `${filtro}`, $options: "i" } }
           ]
-        }).skip(limit * page).limit(limit).where({ permicao: "USER" });
+        }).skip(limit * page).limit(limit).where({ permissao: "USER" });
         break;
       case true:
         listaUsuarios = await Usuario.find({
@@ -28,7 +28,7 @@ export const usuarioResolvers = {
             { email: { $regex: `${filtro}`, $options: "i" } },
             { documento: { $regex: `${filtro}`, $options: "i" } }
           ]
-        }).skip(limit * page).limit(limit).where({ ativo: ativo, permicao: "USER" });
+        }).skip(limit * page).limit(limit).where({ ativo: ativo, permissao: "USER" });
         break;
       case false:
         listaUsuarios = await Usuario.find({
@@ -37,7 +37,7 @@ export const usuarioResolvers = {
             { email: { $regex: `${filtro}`, $options: "i" } },
             { documento: { $regex: `${filtro}`, $options: "i" } }
           ]
-        }).skip(limit * page).limit(limit).where({ ativo: ativo, permicao: "USER" });
+        }).skip(limit * page).limit(limit).where({ ativo: ativo, permissao: "USER" });
         break;
       }
 
