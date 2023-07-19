@@ -43,7 +43,7 @@ const PedidoModel = new Schema<IPedido>({
     preco: {
       type: Number,
       required: [true, "Preço é obrigatório"],
-      min: [0.01, "O Preço minimo é R$ 0.01. Valor fornecido {VALUE}"],
+      min: [0.001, "O Preço minimo é R$ 0.01. Valor fornecido {VALUE}"],
     },
     quantidade: {
       type: Number,

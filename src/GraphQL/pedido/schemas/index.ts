@@ -59,6 +59,7 @@ scalar DateTime
 
   type Query {
     pedidos(page: Int, limit: Int): Pedidos
+    pedidosDoUsuario(page: Int, limit: Int, id: ID!): Pedidos
     pedido(id: ID!): Pedido!
   }
 

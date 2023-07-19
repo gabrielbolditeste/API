@@ -22,6 +22,29 @@ export const pedidoResolvers = {
       return { listaPedidos, quantidadePedidos };
     },
 
+    async pedidosDoUsuario(_, { page = 0, limit = 10, id }) {
+      if (limit > 100) limit = 100;
+
+      const quantidadePedidos = await Pedido.count();
+
+      const listaPedidos = await Pedido.find()
+        .skip(limit * page)
+        .limit(limit)
+        .sort({ data: -1 })
+        .populate([
+          { path: "usuario" },
+          { path: "cliente" },
+          {
+            path: "produtos",
+            populate: {
+              path: "produto",
+            }
+          }])
+        .where({ usuario: id });
+
+      return { listaPedidos, quantidadePedidos };
+    },
+
     async pedido(_, { id }) {
       const pedido = await Pedido.findById(id)
         .populate([
@@ -41,8 +64,8 @@ export const pedidoResolvers = {
 
       const novoPedido = new Pedido({ ...pedido });
 
-      const pedidoFeito =  await novoPedido.save();
-      if(pedidoFeito) {
+      const pedidoFeito = await novoPedido.save();
+      if (pedidoFeito) {
         return "Pedido cadastrado";
       } else {
         console.log("Error");
