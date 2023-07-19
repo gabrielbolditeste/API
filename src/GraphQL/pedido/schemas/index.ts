@@ -26,7 +26,7 @@ scalar DateTime
     data: DateTime
     cliente: Cliente
     usuario: Usuario
-    transportador: String
+    transportadora: String
     codigoDeBarras: String
     observacoes: String
     prazoDeEntrega: String
@@ -43,7 +43,7 @@ scalar DateTime
     data: DateTime
     cliente: String!
     usuario: String!
-    transportador: String
+    transportadora: String
     codigoDeBarras: String
     observacoes: String
     prazoDeEntrega: String

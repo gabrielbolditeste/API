@@ -10,7 +10,7 @@ interface IPedido {
   data: Date;
 
   condicaoPagamento: string;
-  transportador: string;
+  transportadora: string;
   codigoDeBarras: string;
   observacoes: string;
   prazoDeEntrega: string;
@@ -86,7 +86,7 @@ const PedidoModel = new Schema<IPedido>({
     ref: "usuarios",
     autopopulate: true
   },
-  transportador: {
+  transportadora: {
     type: String,
     default: ""
   },
