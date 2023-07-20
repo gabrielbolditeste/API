@@ -17,7 +17,8 @@ export const produtoResolvers = {
           ]
         })
           .skip(limit * page)
-          .limit(limit);
+          .limit(limit)
+          .sort({ descricao: 1 });
         break;
       case true:
         listaProdutos = await Produto.find({
@@ -28,7 +29,8 @@ export const produtoResolvers = {
         })
           .skip(limit * page)
           .limit(limit)
-          .where({ ativo: ativo });
+          .where({ ativo: ativo })
+          .sort({ descricao: 1 });
         break;
       case false:
         listaProdutos = await Produto.find({
@@ -39,7 +41,8 @@ export const produtoResolvers = {
         })
           .skip(limit * page)
           .limit(limit)
-          .where({ ativo: ativo });
+          .where({ ativo: ativo })
+          .sort({ descricao: 1 });
         break;
       }
 
