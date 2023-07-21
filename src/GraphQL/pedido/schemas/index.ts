@@ -4,6 +4,7 @@ scalar DateTime
   type ProdutoPedido {
     codigo: String!
     descricao: String!
+    descontos: [Float]
     preco: Float!
     quantidade: Int!
     produto: Produto!
@@ -13,6 +14,7 @@ scalar DateTime
     codigo: String!
     descricao: String!
     preco: Float!
+    descontos: [Float]
     quantidade: Int!
     produto: String!
   }
@@ -20,7 +22,6 @@ scalar DateTime
   type Pedido {
     _id: String
     produtos: [ProdutoPedido]
-    descontos: [Float]
     total: Float
     condicaoPagamento: String
     data: DateTime
@@ -37,7 +38,6 @@ scalar DateTime
 
   input PedidoInput {
     produtos: [ProdutoPedidoInput]!
-    descontos: [Float]
     total: Float!
     condicaoPagamento: String!
     data: DateTime

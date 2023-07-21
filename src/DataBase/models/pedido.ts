@@ -5,7 +5,7 @@ interface IPedido {
   cliente: Types.ObjectId;
   usuario: Types.ObjectId;
   produtos: Array<IProduto>;
-  descontos: Array<number>; // remover desconto do pedido e aplicar os descontos por produto
+  // descontos: Array<number>; // remover desconto do pedido e aplicar os descontos por produto
   total: number;
   data: Date;
 
@@ -23,6 +23,7 @@ interface IProduto {
   codigo: string,
   descricao: string,
   preco: number,
+  descontos: Array<number>;
   quantidade: number,
   produto: Types.ObjectId
 }
@@ -45,6 +46,10 @@ const PedidoModel = new Schema<IPedido>({
       required: [true, "Preço é obrigatório"],
       min: [0.001, "O Preço minimo é R$ 0.01. Valor fornecido {VALUE}"],
     },
+    descontos: {
+      type: [Schema.Types.Number],
+      default: [0, 0, 0]
+    },
     quantidade: {
       type: Number,
       required: [true, "A Quantidade é obrigatória"],
@@ -58,10 +63,6 @@ const PedidoModel = new Schema<IPedido>({
       autopopulate: true
     }
   }],
-  descontos: {
-    type: [Schema.Types.Number],
-    default: [0, 0, 0]
-  },
   total: {
     type: Number,
     required: [true, "O Valor Total da compra é obrigatório"]
