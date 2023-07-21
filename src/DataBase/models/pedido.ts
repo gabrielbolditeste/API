@@ -1,41 +1,32 @@
 import mongoose, { Schema, Types, model } from "mongoose";
 
-// interface IPedido {
-//   id: string;
-//   produtos: [
-//     {
-//       codigo: string,
-//       descricao: string,
-//       preco: number,
-//       produto: Types.ObjectId
-//     }
-//   ];
-//   descontos: Array<number>;
-//   total: number;
-//   data: Date;
-//   cliente: Types.ObjectId;
-//   usuario: Types.ObjectId;
-// }
 interface IPedido {
   id: string;
-  produtos: Array<IProduto>;
-  descontos: Array<number>;
-  total: number;
-  data: Date;
   cliente: Types.ObjectId;
   usuario: Types.ObjectId;
+  produtos: Array<IProduto>;
+  // descontos: Array<number>; // remover desconto do pedido e aplicar os descontos por produto
+  total: number;
+  data: Date;
+
+  condicaoPagamento: string;
+  transportadora: string;
+  codigoDeBarras: string;
+  observacoes: string;
+  prazoDeEntrega: string;
+  telefone: string;
+  entregaOuColeta: string;
+  pedidoEspecial: string;
 }
 
 interface IProduto {
   codigo: string,
   descricao: string,
   preco: number,
+  descontos: Array<number>;
   quantidade: number,
   produto: Types.ObjectId
 }
-
-// const childSchema: Schema = new Schema({ name: String });
-// const ChildModel = model<Child>('Child', childSchema);
 
 const PedidoModel = new Schema<IPedido>({
   id: {
@@ -53,7 +44,11 @@ const PedidoModel = new Schema<IPedido>({
     preco: {
       type: Number,
       required: [true, "Preço é obrigatório"],
-      min: [0.01, "O Preço minimo é R$ 0.01. Valor fornecido {VALUE}"],
+      min: [0.001, "O Preço minimo é R$ 0.01. Valor fornecido {VALUE}"],
+    },
+    descontos: {
+      type: [Schema.Types.Number],
+      default: [0, 0, 0]
     },
     quantidade: {
       type: Number,
@@ -63,18 +58,18 @@ const PedidoModel = new Schema<IPedido>({
     },
     produto: {
       type: mongoose.Schema.Types.ObjectId,
-      // required: [true, "O ID do produto é obrigatório"],
+      required: [true, "O ID do produto é obrigatório"],
       ref: "produtos",
       autopopulate: true
     }
   }],
-  descontos: {
-    type: [Schema.Types.Number],
-    default: [0, 0, 0]
-  },
   total: {
     type: Number,
     required: [true, "O Valor Total da compra é obrigatório"]
+  },
+  condicaoPagamento: {
+    type: String,
+    default: ""
   },
   data: {
     type: Date,
@@ -82,15 +77,43 @@ const PedidoModel = new Schema<IPedido>({
   },
   cliente: {
     type: mongoose.Schema.Types.ObjectId,
-    // required: [true, "O ID do cliente é obrigatório"],
+    required: [true, "O ID do cliente é obrigatório"],
     ref: "clientes",
     autopopulate: true
   },
   usuario: {
     type: mongoose.Schema.Types.ObjectId,
-    // required: [true, "O ID do usuario é obrigatório"],
+    required: [true, "O ID do usuario é obrigatório"],
     ref: "usuarios",
     autopopulate: true
+  },
+  transportadora: {
+    type: String,
+    default: ""
+  },
+  codigoDeBarras: {
+    type: String,
+    default: ""
+  },
+  observacoes: {
+    type: String,
+    default: ""
+  },
+  prazoDeEntrega: {
+    type: String,
+    default: ""
+  },
+  telefone: {
+    type: String,
+    default: ""
+  },
+  entregaOuColeta: {
+    type: String,
+    default: ""
+  },
+  pedidoEspecial: {
+    type: String,
+    default: ""
   }
 });
 

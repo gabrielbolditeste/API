@@ -1,14 +1,14 @@
 
 import isEmail from "validator/lib/isEmail.js";
-
 import { Schema, model } from "mongoose";
+import { Estado } from "../enums/Estados.js";
+import { Permissao } from "../enums/Permissao.js";
 
-interface IUsuario {
+export interface IUsuarioModel {
   id: string;
   senha: string;
   nome: string;
   documento: string;
-  razaoSocial: string;
   cep: string;
   endereco: string;
   numero: string;
@@ -21,11 +21,11 @@ interface IUsuario {
   observacoes: string;
   ativo: boolean;
   jwt: string;
-  permicao: string;
+  permissao: string;
   dataCadastro: Date;
 }
 
-const UsuarioModel = new Schema<IUsuario>(
+const UsuarioModel = new Schema<IUsuarioModel>(
   {
     id: {
       type: String
@@ -37,14 +37,8 @@ const UsuarioModel = new Schema<IUsuario>(
     },
     documento: {
       type: String,
-      // required: [true, "O Documento é obrigatório"],
-      // min: [11, "Mínimo de 11 caracteres"],
-      // max: [14, "Máximo de 14 caracteres"]
-    },
-    razaoSocial: {
-      type: String,
-      required: [true, "A Razão Social é obrigatório"],
-      min: [3, "Mínimo de 3 caracteres"]
+      required: [true, "O Documento é obrigatório"],
+      unique: true,
     },
     cep: {
       type: String,
@@ -73,7 +67,8 @@ const UsuarioModel = new Schema<IUsuario>(
     },
     uf: {
       type: String,
-      default: ""
+      required: [true, "O campo UF não pode ser nulo"],
+      enum: Estado
     },
     telefone: {
       type: String,
@@ -82,6 +77,7 @@ const UsuarioModel = new Schema<IUsuario>(
     email: {
       type: String,
       required: [true, "O Email é obrigatório"],
+      unique: true,
       validate: [isEmail, "{VALUE} não é um Email valido"]
     },
     observacoes: {
@@ -98,15 +94,16 @@ const UsuarioModel = new Schema<IUsuario>(
     },
     ativo: {
       type: Boolean,
+      enum: {
+        values: [1, 0],
+        message: "Ativo deve ser TRUE ou FALSE. Valor fornecido {VALUE}."
+      },
       default: true,
     },
-    permicao: {
+    permissao: {
       type: String,
       required: [true, "A Premição é obrigatória"],
-      enum: {
-        values: ["DEV", "ADM", "USER"],
-        message: "A Premição {VALUE} não é valida"
-      }
+      enum: Permissao
     },
     dataCadastro: {
       type: Date,
@@ -118,4 +115,4 @@ const UsuarioModel = new Schema<IUsuario>(
   }
 );
 
-export const Usuario = model<IUsuario>("usuarios", UsuarioModel);
+export const Usuario = model<IUsuarioModel>("usuarios", UsuarioModel);

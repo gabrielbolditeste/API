@@ -7,6 +7,8 @@ export const produtoTypeDefs = `#graphql
     urlImg: String
     favorito: Boolean
     ativo: Boolean
+    precoPromocional: Float
+    promocaoAtiva: Boolean
   }
 
   input ProdutoInput {
@@ -16,23 +18,22 @@ export const produtoTypeDefs = `#graphql
     urlImg: String
     favorito: Boolean
     ativo: Boolean
+    precoPromocional: Float
+    promocaoAtiva: Boolean
   }
 
-  input ProdutoUpdateInput {
-    codigo: String
-    descricao: String
-    preco: Float
-    urlImg: String
-    favorito: Boolean
-    ativo: Boolean
+  type Produtos {
+    listaProdutos: [Produto]
+    quantidadeProdutos: Int
   }
 
   type Query {
-    produtos(page: Int, limit: Int): [Produto]
-    produto(id: ID!): Produto!
+    produtos(page: Int, limit: Int, ativo: Boolean, filtro: String): Produtos
+    produto(id: ID!): Produto
   }
 
   type Mutation {
     adicionarProduto(produtoInput: ProdutoInput): Produto
+    atualizaProduto(id: ID!, produtoInput: ProdutoInput): Produto
   }
 `;

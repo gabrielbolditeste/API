@@ -8,6 +8,8 @@ interface IProduto {
   urlImg: string;
   favorito: boolean;
   ativo: boolean;
+  precoPromocional: number;
+  promocaoAtiva: boolean;
 }
 
 const ProdutoModel = new Schema<IProduto>(
@@ -16,19 +18,18 @@ const ProdutoModel = new Schema<IProduto>(
       type: String
     },
     codigo: {
-      unique: true,
       type: String,
+      unique: true,
       required: [true, "O Código é obrigatório"]
     },
     descricao: {
-      unique: true,
       type: String,
+      unique: true,
       required: [true, "A Descrição é obrigatória"]
     },
     preco: {
       type: Number,
-      required: [true, "Preço é obrigatório"],
-      min: [0.01, "O Preço minimo é R$ 0.01. Valor fornecido {VALUE}"],
+      default: 0
     },
     urlImg: {
       type: String,
@@ -41,6 +42,14 @@ const ProdutoModel = new Schema<IProduto>(
     ativo: {
       type: Boolean,
       default: true,
+    },
+    precoPromocional: {
+      type: Number,
+      default: 0
+    },
+    promocaoAtiva: {
+      type: Boolean,
+      default: false
     }
   },
   {
