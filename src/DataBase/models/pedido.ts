@@ -5,7 +5,7 @@ interface IPedido {
   cliente: Types.ObjectId;
   usuario: Types.ObjectId;
   produtos: Array<IProduto>;
-  descontos: Array<number>;
+  descontos: Array<number>; // remover desconto do pedido e aplicar os descontos por produto
   total: number;
   data: Date;
 
