@@ -26,15 +26,18 @@ scalar DateTime
     documento: String!
     inscricaoEstadual: String
     razaoSocial: String!
+    
     cep: String
+    uf: String!
+    municipio: String!
     endereco: String
+    bairro: String
     numero: String
     complemento: String
-    bairro: String
-    municipio: String!
-    uf: String!
-    telefone: String
+    
     email: String!
+    telefone: String
+    
     observacoes: String
     usuario: String!
   }
@@ -47,7 +50,7 @@ scalar DateTime
   type Query {
     clientes(page: Int, limit: Int, filtro: String): Clientes
     cliente(id: ID!): Cliente!
-    clientesPorUsuario(id: ID!, page: Int, limit: Int): [Cliente]
+    clientesPorUsuario(id: ID!, page: Int, limit: Int, filtro: String): [Cliente]
   }
 
   type Mutation {
