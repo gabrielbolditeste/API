@@ -2,6 +2,7 @@ import { IUsuarioModel, Usuario } from "../../../DataBase/models/usuario.js";
 import bcrypt from "bcrypt";
 import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
+import { enviarEmail } from "../../../Email/index.js";
 
 export const usuarioResolvers = {
   Query: {
@@ -107,7 +108,7 @@ export const usuarioResolvers = {
         const usuario = await Usuario.findOne({ email });
 
         if (usuario === null) {
-          erro("Email não encontrado");
+          throw new GraphQLError("Email não encontrado");
         } else if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
           usuario.jwt = jwt.sign({
             nome: usuario.nome,
@@ -118,10 +119,10 @@ export const usuarioResolvers = {
           await usuario.save();
           return "Nova senha Salva";
         } else {
-          erro("Senha Atual incorreta");
+          throw new GraphQLError("Senha Atual incorreta");
         }
       } catch (error) {
-        erro("Erro...");
+        throw new GraphQLError(error.message);
       }
     },
 
@@ -135,6 +136,24 @@ export const usuarioResolvers = {
         } else {
           erro("Erro interno do sistema.");
         }
+      }
+    },
+
+    async esqueciMinhaSenha(_, { email }) {
+      try {
+        const usuario = await Usuario.findOne({ email: email.toLowerCase() });
+        if (!usuario) {
+          throw new GraphQLError("Email não encontrado");
+        } else {
+          const novaSenha = enviarEmail(email);
+          usuario.senha = await bcrypt.hash(novaSenha, 10);
+          await usuario.save();
+          return "Nova senha enviada por E-mail";
+        }
+
+        
+      } catch (error) {
+        throw new GraphQLError(error.message);
       }
     }
   }

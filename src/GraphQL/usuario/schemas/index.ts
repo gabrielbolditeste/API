@@ -81,7 +81,8 @@ scalar DateTime
   type Mutation {
     adicionarUsuario(usuarioInput: UsuarioInput): Usuario
     atualizaUsuario(id: ID!, usuarioInput: UsuarioUpdateInput): Usuario!
-    loginUsuario(loginInput: LoginInput): Usuario
-    atualizaSenha(novaSenhaInput: NovaSenhaInput): String!
+    loginUsuario(loginInput: LoginInput!): Usuario
+    atualizaSenha(novaSenhaInput: NovaSenhaInput!): String!
+    esqueciMinhaSenha(email: String!): String!
   }
 `;
