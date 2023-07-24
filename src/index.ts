@@ -5,7 +5,7 @@ import { typeDefs, resolvers } from "./GraphQL/index.js";
 
 // const MONGODB = "mongodb+srv://root:root@cluster0.kh8rbcy.mongodb.net/KMBv2?retryWrites=true&w=majority";
 // const MONGODB = process.env.DB || "mongodb+srv://root:root@cluster0.kh8rbcy.mongodb.net/KMBv2TESTE?retryWrites=true&w=majority";
-const MONGODB = process.env.DB;
+const MONGODB = process.env.DB || "mongodb+srv://root:root@cluster0.kh8rbcy.mongodb.net/KMBv2TESTE?retryWrites=true&w=majority";
 
 await connect(MONGODB);
 
