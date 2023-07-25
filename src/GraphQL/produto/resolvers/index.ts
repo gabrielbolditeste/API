@@ -1,4 +1,5 @@
 import { Produto } from "../../../DataBase/models/produto.js";
+import ErroBase from "../../../Errors/ErroBase.js";
 
 export const produtoResolvers = {
   Query: {
@@ -57,9 +58,13 @@ export const produtoResolvers = {
 
   Mutation: {
     async adicionarProduto(_, { produtoInput: { ...produto } }) {
-      const novoProduto = new Produto({ ...produto });
-      const resposta = await novoProduto.save();
-      return resposta;
+      try {
+        const novoProduto = new Produto({ ...produto });
+        const resposta = await novoProduto.save();
+        return resposta;
+      } catch (error) {
+        ErroBase.enviarResposta(error.message);
+      }
     },
 
     async atualizaProduto(_, { id, produtoInput }) {

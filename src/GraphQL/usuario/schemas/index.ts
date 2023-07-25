@@ -34,8 +34,6 @@ scalar DateTime
     email: String!
     observacoes: String
     ativo: Boolean
-    jwt: String
-    senha: String!
     permissao: Permissao!
     dataCadastro: DateTime
   }

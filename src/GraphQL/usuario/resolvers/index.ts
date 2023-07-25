@@ -2,7 +2,10 @@ import { IUsuarioModel, Usuario } from "../../../DataBase/models/usuario.js";
 import bcrypt from "bcrypt";
 import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
-import { enviarEmail } from "../../../Email/index.js";
+import { enviarEmailEsqueciMinhaSenha } from "../../../Email/EsqueciMinhaSenha/index.js";
+import { criaSenha } from "../../../utils/criaSenha.js";
+import { enviarEmailNovoUsuario } from "../../../Email/NovoUsuario/index.js";
+import ErroBase from "../../../Errors/ErroBase.js";
 
 export const usuarioResolvers = {
   Query: {
@@ -41,7 +44,6 @@ export const usuarioResolvers = {
         }).skip(limit * page).limit(limit).where({ ativo: ativo, permissao: "USER" });
         break;
       }
-
       return { listaUsuarios, quantidadeUsuarios };
     },
 
@@ -58,33 +60,37 @@ export const usuarioResolvers = {
         const oldUserCpf = await Usuario.findOne({ documento: usuario.documento });
 
         if (oldUserEmail || oldUserCpf) {
-          erro("Documento ou E-mail já cadastrado.");
+          ErroBase.enviarResposta("Documento ou E-mail já cadastrado.");
         }
 
-        if (usuario.senha.length >= 6) {
-          const senhaCryptografada = await bcrypt.hash(usuario.senha, 10);
-          const novoUsuario = new Usuario({
-            ...usuario,
-            email: usuario.email.toLowerCase(),
-            senha: senhaCryptografada,
-            jwt: jwt.sign({
-              nome: usuario.nome,
-              email: usuario.email,
-              permissao: usuario.permissao,
-            }, "ISSO_DEVERIA_SER_PRIVATE_KEY")
-          });
-          return await novoUsuario.save();
-        } else {
-          erro("Senha deve ter mais de 6 caracteres");
+        const senha = criaSenha();
+        const senhaCryptografada = await bcrypt.hash(senha, 10);
+        const novoUsuario = new Usuario({
+          ...usuario,
+          email: usuario.email.toLowerCase(),
+          senha: senhaCryptografada,
+          jwt: jwt.sign({
+            nome: usuario.nome,
+            email: usuario.email,
+            permissao: usuario.permissao,
+          }, "ISSO_DEVERIA_SER_PRIVATE_KEY")
+        });
+
+        const resp = await novoUsuario.save();
+        if (resp) {
+          enviarEmailNovoUsuario(usuario.email, senha);
         }
+
+        return resp;
       } catch (error) {
-        erro("Erro...");
+        ErroBase.enviarResposta(error.message);
       }
     },
 
     async loginUsuario(_, { loginInput: { email, senha } }) {
       try {
         const usuario = await Usuario.findOne({ email: email.toLowerCase() });
+        if (usuario.ativo === false) throw new GraphQLError("Seu perfil está bloqueado, entre em contato com o administrador.");
 
         if (usuario && (await bcrypt.compare(senha, usuario.senha.toString()))) {
           usuario.jwt = jwt.sign({
@@ -96,10 +102,10 @@ export const usuarioResolvers = {
           );
           return usuario;
         } else {
-          throw new GraphQLError("Erro ao efetuar login");
+          ErroBase.enviarResposta("Erro ao efetuar login");
         }
       } catch (error) {
-        throw new GraphQLError("Erro ao efetuar login");
+        ErroBase.enviarResposta(error.message);
       }
     },
 
@@ -119,10 +125,10 @@ export const usuarioResolvers = {
           await usuario.save();
           return "Nova senha Salva";
         } else {
-          throw new GraphQLError("Senha Atual incorreta");
+          ErroBase.enviarResposta("Senha Atual incorreta");
         }
       } catch (error) {
-        throw new GraphQLError(error.message);
+        ErroBase.enviarResposta(error.message);
       }
     },
 
@@ -132,9 +138,9 @@ export const usuarioResolvers = {
         return usuarioAtualizado;
       } catch (error) {
         if (error.code === 11000) {
-          erro("Email já cadastrado no sistema");
+          ErroBase.enviarResposta("Email já cadastrado no sistema");
         } else {
-          erro("Erro interno do sistema.");
+          ErroBase.enviarResposta("Erro interno do sistema.");
         }
       }
     },
@@ -143,22 +149,17 @@ export const usuarioResolvers = {
       try {
         const usuario = await Usuario.findOne({ email: email.toLowerCase() });
         if (!usuario) {
-          throw new GraphQLError("Email não encontrado");
+          ErroBase.enviarResposta("Email não encontrado");
         } else {
-          const novaSenha = enviarEmail(email);
-          usuario.senha = await bcrypt.hash(novaSenha, 10);
+          const senha = criaSenha();
+          enviarEmailEsqueciMinhaSenha(email, senha);
+          usuario.senha = await bcrypt.hash(senha, 10);
           await usuario.save();
           return "Nova senha enviada por E-mail";
         }
-
-        
       } catch (error) {
-        throw new GraphQLError(error.message);
+        ErroBase.enviarResposta(error.message);
       }
     }
   }
-};
-
-const erro = (msg?: string) => {
-  console.log("[ERROR] - ", msg);
 };
