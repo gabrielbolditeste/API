@@ -1,4 +1,5 @@
 import { Cliente } from "../../../DataBase/models/cliente.js";
+import ErroBase from "../../../Errors/ErroBase.js";
 
 export const clienteResolvers = {
   Query: {
@@ -50,18 +51,22 @@ export const clienteResolvers = {
   Mutation: {
     async adicionarCliente(_, { clienteInput: { ...cliente } }) {
       const novoCliente = new Cliente({ ...cliente });
-      const resposta = (await novoCliente.save()).populate( "usuario" );
+      const resposta = (await novoCliente.save()).populate("usuario");
       return resposta;
     },
 
     async atualizaCliente(_, { id, clienteInput }) {
-      const clienteAtualizado = await Cliente.findOneAndUpdate(
-        { _id: id },
-        { ...clienteInput },
-        { new: true, runValidators: true }
-      ).populate("usuario");
+      try {
+        const clienteAtualizado = await Cliente.findOneAndUpdate(
+          { _id: id },
+          { ...clienteInput },
+          { new: true, runValidators: true }
+        ).populate("usuario");
 
-      return clienteAtualizado;
+        return clienteAtualizado;
+      } catch (error) {
+        ErroBase.enviarResposta(error.message);
+      }
     }
   }
 };

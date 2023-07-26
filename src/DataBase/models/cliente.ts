@@ -83,7 +83,8 @@ const ClienteModel = new Schema<ICliente>(
     email: {
       type: String,
       required: [true, "O campo E-MAIL não pode ser nulo"],
-      validate: [isEmail, "{VALUE} não é um Email valido"]
+      validate: [isEmail, "{VALUE} não é um Email valido"],
+      unique: true
     },
     observacoes: {
       type: String,
